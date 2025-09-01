@@ -49,7 +49,7 @@
   .contact a:hover{color:var(--brand-2)}
   
   /* Cards & grids */
-  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 18px 8px}
+  .card{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:18px 18px 20px}
   .card-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:8px}
   .card h3{margin:0;font-size:18px}
   .dates{color:var(--muted);font-size:14px}
@@ -104,8 +104,13 @@
   .reveal.is-visible{opacity:1;transform:none}
   
   /* Footer */
-  .site-footer{padding:24px 0;border-top:1px solid var(--border);background:var(--surface);color:var(--muted);text-align:center}
-  
+  .site-footer {padding: 24px 0;border-top: 1px solid var(--border);background: var(--surface);color: var(--muted);text-align: center;}
+  .site-footer p {margin: 0 0 12px 0;}
+  .footer-links {display: flex;justify-content: center;gap: 24px;flex-wrap: wrap;}
+  .footer-links a {display: inline-flex;align-items: center;gap: 6px;color: var(--text);text-decoration: none;font-size: 14px;}
+  .footer-links a:hover {color: var(--brand);}
+  .footer-links svg {opacity: 0.85;}
+    
   /* Mobile nav */
   .nav-toggle{display:none}
   @media (max-width:800px){
