@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Art Gallery · Vandith Thotla</title>
+  <meta name="description" content="Graphite & charcoal drawings and paintings by Vandith Thotla" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header" role="banner">
+    <nav class="nav" aria-label="Primary">
+      <a class="brand" href="index.html" aria-label="Back to home">Vandith<span>Thotla</span></a>
+      <ul class="nav-list">
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="index.html#experience">Experience</a></li>
+        <li><a class="active" href="gallery.html">Hobbies</a></li>
+        <li><a href="index.html#projects">Projects</a></li>
+        <li><a href="index.html#education">Education</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main id="main" class="section" tabindex="-1">
+    <div class="container">
+      <h1 style="margin-bottom:8px">Vandith's Art Gallery</h1>
+      <p class="muted" style="margin-top:0">A curated collection of <strong>graphite, charcoal, acrylics, and mixed-media artworks</strong> created over the years. Each piece carries a story — from personal portraits to pop culture tributes.</p>
+
+      <!-- Filter bar -->
+      <div class="filter-bar">
+        <button class="chip is-active" data-filter="all">All</button>
+        <button class="chip" data-filter="Graphite/Charcoal">Graphite/Charcoal</button>
+        <button class="chip" data-filter="Painting">Paintings</button>
+        <button class="chip" data-filter="Mixed-Media">Mixed-Media / Ink</button>
+      </div>
+
+      <!-- Masonry (CSS columns) -->
+      <div class="masonry" id="gallery"></div>
+    </div>
+  </main>
+
+  <!-- Lightbox -->
+  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Artwork viewer">
+    <button class="lightbox-close" aria-label="Close">×</button>
+
+    <div class="lightbox-inner" role="document">
+      <img class="lightbox-img" alt="" />
+      <div class="lightbox-meta">
+        <div class="lightbox-title" id="lbTitle"></div>
+        <div class="lightbox-sub" id="lbSub"></div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="site-footer" role="contentinfo">
+    <div class="container">
+      <p>© <span id="year"></span> Vandith Thotla</p>
+    </div>
+  </footer>
+
+  <script>
+    // ---- Artworks (keep your list; types: gc | paint | mixed) ----
+    const ARTWORKS = [
+      { src: 'creative/artworks/057_coolierajinikanth.jpg', title: 'Actor Rajinikanth in Coolie', year: 2025, type: 'Mixed-Media'},
+      { src: 'creative/artworks/056_brahmanandam.jpg',        title: 'Actor Brahmanandam',        year: 2024, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/055_vineelgreeshma.jpg',      title: 'Vineel & Greeshma Thotla',  year: 2023, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/054_ramuvenigandla.jpg',      title: 'Personalized Artwork 10',   year: 2024, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/053_blackpanther.jpg',        title: 'Black Panther - Long Live The King', year: 2021, type: 'Painting'},
+      { src: 'creative/artworks/052_pardhuparents.jpg',       title: 'Personalized Artwork 9',    year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/051_ruchitha.jpg',            title: 'Personalized Artwork 8',    year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/050_saroja.jpg',              title: 'Personalized Artwork 7',    year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/049_anadearmas.jpg',          title: 'Ana de Armas',              year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/048_gwenspiderverse.jpg',     title: 'Spiderverse Gwen',          year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/047_emmawatson.jpg',          title: 'Emma Watson',               year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/046_pettarajinikanth.jpg',    title: 'Actor Rajinikanth in Petta',year: 2020, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/045_nikhitha.jpg',            title: 'Personalized Artwork 6',    year: 2019, type: 'Mixed-Media'},
+      { src: 'creative/artworks/044_thejoker.jpg',            title: 'The Joker',                 year: 2019, type: 'Painting'},
+      { src: 'creative/artworks/043_kalyanvytla.jpg',         title: 'Kalyan Vytla',              year: 2019, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/042_ironmanglow.jpg',         title: 'IronMan (Glow in the dark)',year: 2019, type: 'Mixed-Media'},
+      { src: 'creative/artworks/041_logan.jpg',               title: 'Old Man Logan',             year: 2019, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/040_pratyushakp.jpg',         title: 'Artist Pratyusha',          year: 2019, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/039_kctrktr.jpg',             title: 'KCR KTR',                   year: 2019, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/038_amarjawan.jpg',           title: 'Amar Jawan',                year: 2019, type: 'Painting'},
+      { src: 'creative/artworks/037_vedthotla.jpg',           title: 'Nephew - Ved Thotla',       year: 2018, type: 'Mixed-Media'},
+      { src: 'creative/artworks/036_personalized.jpg',        title: 'Personalized Artwork 5',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/035_thebleedingeye.jpg',      title: 'The Bleeding Eye',          year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/034_anupama.jpg',             title: 'Actress Anupama Parameswaran', year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/033_laxmipraneeth.jpg',       title: 'Personalized Artwork 4',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/032_sajjanar.jpg',            title: 'Police Commissioner Sajjanar', year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/031_Indiaindependanceday.jpg',title: 'Indian Independence Day',   year: 2018, type: 'Painting'},
+      { src: 'creative/artworks/030_tonystark.jpg',           title: 'Tony Stark',                year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/029_tagore.jpg',              title: 'Rabindranath Tagore',       year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/028_varunthotla.jpg',         title: 'Brother - Varun Thotla',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/027_batmaninverted.jpg',      title: 'Batman Inverted',           year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/026_vishalthotla.jpg',        title: 'Personalized Artwork 3',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/025_karthikmanepalli.jpg',    title: 'Personalized Artwork 2',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/024_imrankhan.jpg',           title: 'Actor Imran Khan',          year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/023_vijaydevarakonda.jpg',    title: 'Actor Vijay Devarakonda',   year: 2018, type: 'Mixed-Media'},
+      { src: 'creative/artworks/022_wolverineinverted.jpg',   title: 'Wolverine Inverted',        year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/021_dragonballz.jpg',         title: 'Dragon Ball Z',             year: 2018, type: 'Mixed-Media'},
+      { src: 'creative/artworks/020_dadmom.jpg',              title: 'Dad & Mom',                 year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/019_samantha.jpg',            title: 'Actress Samantha',          year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/018_wolverineanimal.jpg',     title: 'Wolverine - Animal',        year: 2018, type: 'Painting'},
+      { src: 'creative/artworks/017_tharunnelanti.jpg',       title: 'Personalized Artwork 1',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/016_pawankalyan.jpg',         title: 'Actor Pawan Kalyan',        year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/015_jrntr.jpg',               title: 'Actor Jr NTR & son',        year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/014_maheshbabu.jpg',          title: 'Actor Mahesh Babu & daughter', year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/013_alluarjun.jpg',           title: 'Actor Allu Arjun & son',    year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/012_nani.jpg',                title: 'Actor Nani & son',          year: 2018, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/011_dad.jpg',                 title: 'Dad - Phases of Life',      year: 2017, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/010_ranjani.jpg',             title: 'Dancer Siri',               year: 2017, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/009_rdj.jpg',                 title: 'Robert Downey Jr',          year: 2017, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/008_dishapatani.jpg',         title: 'Actress Disha Patani',      year: 2017, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/007_couple.jpg',              title: 'Aashiqui',                  year: 2017, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/006_ironman.jpg',             title: 'Iron Man',                  year: 2016, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/005_deadpool.jpg',            title: 'Love Deadpool',             year: 2016, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/004_spidey.jpg',              title: 'SpiderMan - Hey Everyone',  year: 2016, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/003_wolverine.jpg',           title: 'The Wolverine',             year: 2016, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/002_deadpool.jpg',            title: 'Chill Deadpool',            year: 2016, type: 'Graphite/Charcoal'},
+      { src: 'creative/artworks/001_vandith.jpg',             title: 'Self Portrait (Vandith)',   year: 2016, type: 'Graphite/Charcoal'}
+    ];
+
+    const gallery = document.getElementById('gallery');
+    const yearEl  = document.getElementById('year');
+    yearEl.textContent = new Date().getFullYear();
+
+    // helper: numeric prefix (NNN_) if you use it, for stable secondary sort
+    function indexFromSrc(src){ const m = src.match(/\/(\d{3})_/); return m ? +m[1] : 0; }
+
+    function render(filter='all'){
+      gallery.innerHTML = '';
+      const filtered = ARTWORKS.filter(a => filter==='all' ? true : a.type===filter);
+
+      // newest → oldest, then by index desc (keeps visual stability)
+      filtered.sort((a,b) => (b.year-a.year) || (indexFromSrc(b.src)-indexFromSrc(a.src)));
+
+      for(const a of filtered){
+        const fig = document.createElement('figure');
+        fig.className = 'masonry-item';
+        fig.tabIndex = 0;
+        fig.innerHTML = `
+          <div class="thumb">
+            <img src="${a.src}" alt="${a.title} (${a.year})" loading="lazy">
+            <span class="pill ${a.type}" aria-label="${a.type}">${(a.type==='Graphite/Charcoal'?'Graphite/Charcoal':a.type==='Painting'?'Painting':'Mixed-Media')}</span>
+          </div>
+          <figcaption>
+            <span class="title">${a.title}</span>
+            <span class="year">${a.year}</span>
+          </figcaption>
+        `;
+        fig.addEventListener('click',   () => openLightbox(a));
+        fig.addEventListener('keypress',(e)=>{ if(e.key==='Enter') openLightbox(a); });
+        gallery.appendChild(fig);
+      }
+    }
+
+    // Filter chips
+    const chips = Array.from(document.querySelectorAll('.chip'));
+    chips.forEach(ch => ch.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('is-active'));
+      ch.classList.add('is-active');
+      render(ch.dataset.filter);
+      if (location.hash && location.hash !== '#'+ch.dataset.filter) history.replaceState(null,'',' ');
+    }));
+
+    // Deep-link support (#gc | #paint | #mixed | #all)
+    const startFilter = (location.hash || '').replace('#','') || 'all';
+    const startChip   = chips.find(c => c.dataset.filter === startFilter);
+    if (startChip) startChip.click(); else render('all');
+
+    // Lightbox
+    const lightbox = document.getElementById('lightbox');
+    const lbImg    = document.querySelector('.lightbox-img');
+    const lbTitle  = document.getElementById('lbTitle');
+    const lbSub    = document.getElementById('lbSub');
+    const lbClose  = document.querySelector('.lightbox-close');
+
+    function openLightbox(a){
+      lbImg.src = a.src;
+      lbImg.alt = `${a.title} (${a.year})`;
+      lbTitle.textContent = a.title;
+      lbSub.textContent   = a.year + (a.type ? ` · ${a.type}` : '');
+      lightbox.setAttribute('aria-hidden','false');
+      lightbox.classList.add('open');
+      lbClose.focus();
+    }
+    function closeLightbox(){
+      lightbox.classList.remove('open');
+      lightbox.setAttribute('aria-hidden','true');
+      lbImg.src = '';
+    }
+    lbClose.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e)=>{ if(e.target===lightbox) closeLightbox(); });
+    document.addEventListener('keydown',(e)=>{ if(e.key==='Escape') closeLightbox(); });
+  </script>
+</body>
+</html>
